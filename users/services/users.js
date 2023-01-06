@@ -7,12 +7,12 @@ const bcrypt = require("bcryptjs");
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const userTable = "momentos-users";
 
-const get = async (username) => {
-  if (!!username) {
+const get = async (id) => {
+  if (!!id) {
     const params = {
       TableName: userTable,
       Key: {
-        username: username,
+        id: Number(id),
       },
     };
     return await dynamodb
@@ -50,10 +50,12 @@ const post = async (userInfo, userId) => {
   const name = userInfo.name;
   const email = userInfo.email;
   const password = userInfo.password;
+  const dob = userInfo.dob;
   const color = userInfo.color;
   const emoji = userInfo.emoji;
   const connections = userInfo.connections;
   const items = userInfo.items;
+  const lastactive = userInfo.lastactive;
 
   const dynamoUser = await getUser(username);
 
@@ -67,12 +69,14 @@ const post = async (userInfo, userId) => {
     email: !!email ? email.toLowerCase().trim() : dynamoUser.email,
     username: !!username ? username.toLowerCase().trim() : dynamoUser.username,
     password: !!password ? encryptedPassword : dynamoUser.password,
+    dob: !!dob ? dob : dynamoUser.dob,
     color: !!color ? color.toLowerCase().trim() : dynamoUser.color,
     emoji: !!emoji ? emoji.toLowerCase().trim() : dynamoUser.emoji,
     connections: !!connections
       ? [...dynamoUser.connections, connections]
       : dynamoUser.connections,
     items: !!items ? [...dynamoUser.items, items] : dynamoUser.items,
+    lastactive: !!lastactive ? lastactive : dynamoUser.lastactive,
   };
 
   const putUserResponse = await putUser(user);

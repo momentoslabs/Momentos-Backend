@@ -37,6 +37,7 @@ const signin = async (user) => {
     connections: dynamoUser.connections,
     requested: dynamoUser.requested,
     items: dynamoUser.items,
+    lastactive: dynamoUser.lastactive,
   };
 
   const token = auth.generateToken(userInfo);

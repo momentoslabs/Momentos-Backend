@@ -23,10 +23,12 @@ const signup = async (userInfo) => {
   const connections = [];
   const requested = [];
   const items = [];
+  const lastactive = Date.now();
 
-  if (!username || !name || !email || !password) {
+  if (!username || !name || !email || !password || !dob) {
     return util.buildResponse(401, {
-      message: "All fields are required.",
+      message:
+        "These fields are required (username, name, email, password, dob).",
     });
   }
 
@@ -50,6 +52,7 @@ const signup = async (userInfo) => {
     connections: connections,
     requested: requested,
     items: items,
+    lastactive: lastactive,
   };
 
   const putUserResponse = await putUser(user);
@@ -74,6 +77,7 @@ const signup = async (userInfo) => {
       connections: connections,
       requested: requested,
       items: items,
+      lastactive: lastactive,
     },
     token: token,
   };
