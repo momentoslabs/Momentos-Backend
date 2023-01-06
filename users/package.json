@@ -1,0 +1,10 @@
+{
+  "name": "momentos-platform-backend",
+  "version": "0.1.0",
+  "dependencies": {
+    "bcryptjs": "2.4.3",
+    "jsonwebtoken": "8.5.1",
+    "random-unicode-emoji": "^1.0.2",
+    "randomcolor": "^0.6.2"
+  }
+}
