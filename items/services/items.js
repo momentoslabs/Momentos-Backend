@@ -51,15 +51,14 @@ const post = async (itemInfo) => {
   const image = itemInfo.image;
   const description = itemInfo.description;
 
-  if (!title || !description || !image || !ownerid) {
+  if (!ownerid || !image || !description) {
     return util.buildResponse(401, {
-      message:
-        "These fields are required (title, description, image, ownerid).",
+      message: "These fields are required (ownerid, image, description).",
     });
   }
 
   const dynamoItem = await getItem(id);
-  if (dynamoItem && dynamoItem.title) {
+  if (dynamoItem) {
     return util.buildResponse(401, {
       message: "This item ID has already been taken.",
     });
@@ -92,7 +91,7 @@ const react = async (itemInfo) => {
   const reaction = itemInfo.reaction;
   const active = itemInfo.active;
 
-  if (!id || !reaction || !active) {
+  if (!id || !reaction || active === null) {
     return util.buildResponse(401, {
       message: "These fields are required (id, reaction, active).",
     });
