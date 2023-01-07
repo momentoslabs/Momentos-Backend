@@ -57,7 +57,7 @@ const post = async (userInfo, userId) => {
   const items = userInfo.items;
   const lastactive = userInfo.lastactive;
 
-  const dynamoUser = await getUser(username);
+  const dynamoUser = await getUser(userId);
 
   const encryptedPassword = !!password
     ? bcrypt.hashSync(password.trim(), 10)
