@@ -90,11 +90,11 @@ const post = async (userInfo, userId) => {
   return util.buildResponse(200, response);
 };
 
-const getUser = async (username) => {
+const getUser = async (id) => {
   const params = {
     TableName: userTable,
     Key: {
-      username: username,
+      id: Number(id),
     },
   };
 
