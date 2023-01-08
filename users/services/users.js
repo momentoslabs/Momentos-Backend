@@ -72,6 +72,7 @@ const post = async (userInfo, userId) => {
   const color = userInfo.color;
   const emoji = userInfo.emoji;
   const connections = userInfo.connections;
+  const requested = userInfo.requested;
   const items = userInfo.items;
   const lastactive = userInfo.lastactive;
 
@@ -93,6 +94,9 @@ const post = async (userInfo, userId) => {
     connections: !!connections
       ? [...dynamoUser.connections, connections]
       : dynamoUser.connections,
+    requested: !!requested
+      ? [...dynamoUser.requested, requested]
+      : dynamoUser.requested,
     items: !!items ? [...dynamoUser.items, items] : dynamoUser.items,
     lastactive: !!lastactive ? lastactive : dynamoUser.lastactive,
   };
