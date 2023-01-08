@@ -7,26 +7,44 @@ const bcrypt = require("bcryptjs");
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const userTable = "momentos-users";
 
-const get = async (id) => {
-  if (!!id) {
-    const params = {
-      TableName: userTable,
-      Key: {
-        id: Number(id),
-      },
-    };
-    return await dynamodb
-      .get(params)
-      .promise()
-      .then(
-        (response) => {
-          console.log({ response });
-          return util.buildResponse(200, response.Item);
+const get = async (key, usingId) => {
+  if (!!key) {
+    if (usingId) {
+      const params = {
+        TableName: userTable,
+        Key: {
+          id: Number(key),
         },
-        (error) => {
-          console.error("Error getting users: ", error);
-        }
-      );
+      };
+
+      return await dynamodb
+        .get(params)
+        .promise()
+        .then(
+          (response) => {
+            // console.log({ response });
+            return util.buildResponse(200, response.Item);
+          },
+          (error) => {
+            console.error("Error getting user: ", error);
+          }
+        );
+    } else {
+      const params = {
+        TableName: userTable,
+        IndexName: "username-index",
+        KeyConditionExpression: "username = :username",
+        ExpressionAttributeValues: {
+          ":username": key,
+        },
+      };
+      try {
+        const data = await dynamodb.query(params).promise();
+        return util.buildResponse(200, data.Items[0]);
+      } catch (error) {
+        return error;
+      }
+    }
   } else {
     const params = {
       TableName: userTable,
@@ -57,7 +75,7 @@ const post = async (userInfo, userId) => {
   const items = userInfo.items;
   const lastactive = userInfo.lastactive;
 
-  const dynamoUser = await getUser(userId);
+  const dynamoUser = await getUser(userId, true);
 
   const encryptedPassword = !!password
     ? bcrypt.hashSync(password.trim(), 10)
@@ -90,25 +108,42 @@ const post = async (userInfo, userId) => {
   return util.buildResponse(200, response);
 };
 
-const getUser = async (id) => {
-  const params = {
-    TableName: userTable,
-    Key: {
-      id: Number(id),
-    },
-  };
-
-  return await dynamodb
-    .get(params)
-    .promise()
-    .then(
-      (response) => {
-        return response.Item;
+const getUser = async (key, usingId) => {
+  if (usingId) {
+    const params = {
+      TableName: userTable,
+      Key: {
+        id: Number(key),
       },
-      (error) => {
-        console.error("Error getting user: ", error);
-      }
-    );
+    };
+
+    return await dynamodb
+      .get(params)
+      .promise()
+      .then(
+        (response) => {
+          return response.Item;
+        },
+        (error) => {
+          console.error("Error getting user: ", error);
+        }
+      );
+  } else {
+    const params = {
+      TableName: userTable,
+      IndexName: "username-index",
+      KeyConditionExpression: "username = :username",
+      ExpressionAttributeValues: {
+        ":username": key,
+      },
+    };
+    try {
+      const data = await dynamodb.query(params).promise();
+      return data.Items[0];
+    } catch (error) {
+      return error;
+    }
+  }
 };
 
 const putUser = async (user) => {

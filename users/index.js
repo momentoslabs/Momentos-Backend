@@ -11,7 +11,7 @@ const usersPath = "/users";
 const verifyPath = "/verify";
 
 exports.handler = async (event) => {
-  console.log("Request Event: ", event);
+  // console.log("Request Event: ", event);
   let response;
   switch (true) {
     case event.httpMethod === "GET" && event.path === healthPath:
@@ -26,7 +26,10 @@ exports.handler = async (event) => {
       response = await signinService.signin(signinBody);
       break;
     case event.httpMethod === "GET" && event.path.slice(0, 6) === usersPath:
-      response = await usersService.get(event.path.slice(7));
+      response = await usersService.get(
+        event.path.slice(7),
+        !isNaN(Number(event.path.slice(7)))
+      );
       break;
     case event.httpMethod === "POST" && event.path.slice(0, 6) === usersPath:
       const usersPostBody = JSON.parse(event.body);

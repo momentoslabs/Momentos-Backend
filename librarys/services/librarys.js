@@ -20,7 +20,7 @@ const get = async (id) => {
       .promise()
       .then(
         (response) => {
-          console.log({ response });
+          // console.log({ response });
           return util.buildResponse(200, response.Item);
         },
         (error) => {

@@ -5,7 +5,7 @@ const healthPath = "/health";
 const librarysPath = "/librarys";
 
 exports.handler = async (event) => {
-  console.log("Request Event: ", event);
+  // console.log("Request Event: ", event);
   let response;
   switch (true) {
     case event.httpMethod === "GET" && event.path === healthPath:

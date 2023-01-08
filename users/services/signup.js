@@ -23,7 +23,7 @@ const signup = async (userInfo) => {
   const connections = [];
   const requested = [];
   const items = [];
-  const lastactive = Date.now();
+  const lastactive = 0;
 
   if (!username || !name || !email || !password || !dob) {
     return util.buildResponse(401, {

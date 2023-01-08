@@ -6,7 +6,7 @@ const itemsPath = "/items";
 const reactionsPath = "/reactions";
 
 exports.handler = async (event) => {
-  console.log("Request Event: ", event);
+  // console.log("Request Event: ", event);
   let response;
   switch (true) {
     case event.httpMethod === "GET" && event.path === healthPath:
