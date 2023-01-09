@@ -20,10 +20,10 @@ const signup = async (userInfo) => {
   const dob = userInfo.dob;
   const color = randomColor();
   const emoji = randomEmoji.random({ count: 1 })[0];
-  const connections = [];
-  const requested = [];
+  const connections = {};
   const items = [];
   const lastactive = 0;
+  const lastthree = [];
 
   if (!username || !name || !email || !password || !dob) {
     return util.buildResponse(401, {
@@ -50,9 +50,9 @@ const signup = async (userInfo) => {
     color: color,
     emoji: emoji,
     connections: connections,
-    requested: requested,
     items: items,
     lastactive: lastactive,
+    lastthree: lastthree,
   };
 
   const putUserResponse = await putUser(user);
@@ -75,9 +75,9 @@ const signup = async (userInfo) => {
       color: color,
       emoji: emoji,
       connections: connections,
-      requested: requested,
       items: items,
       lastactive: lastactive,
+      lastthree: lastthree,
     },
     token: token,
   };

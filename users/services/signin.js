@@ -30,14 +30,6 @@ const signin = async (user) => {
   const userInfo = {
     id: dynamoUser.id,
     username: dynamoUser.username,
-    name: dynamoUser.name,
-    email: dynamoUser.email,
-    color: dynamoUser.color,
-    emoji: dynamoUser.emoji,
-    connections: dynamoUser.connections,
-    requested: dynamoUser.requested,
-    items: dynamoUser.items,
-    lastactive: dynamoUser.lastactive,
   };
 
   const token = auth.generateToken(userInfo);

@@ -72,15 +72,26 @@ const post = async (userInfo, userId) => {
   const color = userInfo.color;
   const emoji = userInfo.emoji;
   const connections = userInfo.connections;
-  const requested = userInfo.requested;
   const items = userInfo.items;
   const lastactive = userInfo.lastactive;
+  const lastpost = userInfo.lastpost;
 
   const dynamoUser = await getUser(userId, true);
 
   const encryptedPassword = !!password
     ? bcrypt.hashSync(password.trim(), 10)
     : null;
+
+  let newConnections = dynamoUser.connections;
+  if (!!connections) {
+    if (connections.action === 0) {
+      delete newConnections[connections.id];
+    } else if (connections.action === 1) {
+      newConnections[connections.id] = false;
+    } else if (connections.action === 2) {
+      newConnections[connections.id] = true;
+    }
+  }
 
   const user = {
     id: dynamoUser.id,
@@ -91,14 +102,12 @@ const post = async (userInfo, userId) => {
     dob: !!dob ? dob : dynamoUser.dob,
     color: !!color ? color.toLowerCase().trim() : dynamoUser.color,
     emoji: !!emoji ? emoji.toLowerCase().trim() : dynamoUser.emoji,
-    connections: !!connections
-      ? [...dynamoUser.connections, connections]
-      : dynamoUser.connections,
-    requested: !!requested
-      ? [...dynamoUser.requested, requested]
-      : dynamoUser.requested,
+    connections: !!connections ? newConnections : dynamoUser.connections,
     items: !!items ? [...dynamoUser.items, items] : dynamoUser.items,
     lastactive: !!lastactive ? lastactive : dynamoUser.lastactive,
+    lastthree: !!lastpost
+      ? [lastpost, ...dynamoUser.lastthree.slice(0, 2)]
+      : dynamoUser.lastthree,
   };
 
   const putUserResponse = await putUser(user);
