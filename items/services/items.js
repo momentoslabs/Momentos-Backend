@@ -100,16 +100,16 @@ const react = async (itemInfo) => {
   const item = await getItem(id);
 
   switch (reaction) {
-    case 1:
+    case 0:
       item.likes += !!active ? 1 : -1;
       break;
-    case 2:
+    case 1:
       item.fires += !!active ? 1 : -1;
       break;
-    case 3:
+    case 2:
       item.claps += !!active ? 1 : -1;
       break;
-    case 4:
+    case 3:
       item.laughs += !!active ? 1 : -1;
       break;
     default:

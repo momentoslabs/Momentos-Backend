@@ -113,7 +113,7 @@ const post = async (libraryInfo) => {
       requests: {},
       reactions: {},
     };
-    library.reactions[postid] = { reactions: reactions };
+    library.reactions[postid] = reactions;
 
     const putLibraryResponse = await putLibrary(library);
     if (!putLibraryResponse) {
