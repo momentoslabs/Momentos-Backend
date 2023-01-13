@@ -91,7 +91,7 @@ const react = async (itemInfo) => {
   const reaction = itemInfo.reaction;
   const active = itemInfo.active;
 
-  if (!id || !reaction || active === null) {
+  if (!id || reaction === null || active === null) {
     return util.buildResponse(401, {
       message: "These fields are required (id, reaction, active).",
     });

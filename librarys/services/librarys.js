@@ -71,6 +71,8 @@ const post = async (libraryInfo) => {
       if (isapproved) {
         library.approvals[profileid] = true;
       }
+      delete library.requests[profileid];
+
       const library2 = (await getLibrary(profileid)) ?? {
         id: profileid,
         requests: {},
